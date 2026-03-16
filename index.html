@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>XML整形ツール（高速・無料・ブラウザだけ）</title>
+  <meta name="description" content="XMLをブラウザだけでサッと整形。データ送信なし＆完全無料。" />
+  <!-- AdSense -->
+  <meta name="google-adsense-account" content="ca-pub-5864682832251768">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5864682832251768" crossorigin="anonymous"></script>
+  <style>
+    :root { --bg:#f8fafc; --card:#ffffff; --muted:#666666; --fg:#1a1a1a; --acc:#2563eb; }
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.55 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
+    .wrap{max-width:1100px;margin:0 auto;padding:24px}
+    .title{font-size:24px;font-weight:800;letter-spacing:.5px}
+    .card{background:var(--card);border:1px solid #e5e7eb;border-radius:14px;padding:16px;box-shadow:0 2px 8px rgba(0,0,0,0.08)}
+    .row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+    .row > *{margin:4px 0}
+    input[type="number"]{background:#f7f9ff;border:1px solid #d0d5dd;color:var(--fg);border-radius:10px;padding:8px 10px}
+    textarea{width:100%;min-height:180px;background:#f7f9ff;border:1px solid #d0d5dd;border-radius:12px;color:var(--fg);padding:12px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .out{min-height:220px;white-space:pre;overflow:auto;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:14px}
+    .btn{background:#f7f9ff;border:1px solid #d0d5dd;color:var(--fg);padding:10px 14px;border-radius:10px;cursor:pointer}
+    .btn:hover{border-color:#2563eb;color:#2563eb}
+    .btn.primary{border-color:#2563eb;background:#2563eb;color:#fff;font-weight:700}
+    .btn.primary:hover{background:#1d4ed8;border-color:#1d4ed8;color:#fff}
+    .btn.small{padding:6px 10px;border-radius:8px}
+    .muted{color:var(--muted);font-size:13px}
+    .footer{margin-top:12px;padding-top:10px;border-top:1px solid #e5e7eb;font-size:12px;color:var(--muted)}
+    .badge{display:inline-block;padding:2px 10px;border:1px solid #d0d5dd;border-radius:999px;font-size:12px;color:#555}
+    .hint{font-size:12px;color:var(--muted);margin-top:4px}
+    footer.site-footer.card{text-align:center}
+    .footer-nav{display:flex;justify-content:center;gap:0;flex-wrap:wrap;font-size:13px}
+    .footer-nav a{color:var(--muted);text-decoration:none;padding:2px 0}
+    .footer-nav a:hover{color:var(--acc);text-decoration:underline}
+    .footer-nav .sep{margin:0 8px;color:#ccc}
+  </style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- Header -->
+  <div class="row" style="justify-content:space-between">
+    <div class="title">XML整形ツール</div>
+    <div class="badge">ローカル実行 / データ送信なし</div>
+  </div>
+
+  <!-- About -->
+  <div class="card" style="margin-top:10px">
+    <div class="muted">このサイトについて</div>
+    <div style="margin-top:6px">
+      <p style="margin:0 0 6px">本ツールは、ブラウザ内のみで XML を整形する無料サービスです。入力内容はサーバへ送信しません。</p>
+      <p class="hint" style="margin:0">免責：整形結果の正確性は保証しません。ご利用前に内容をご確認ください。</p>
+    </div>
+  </div>
+
+  <!-- Main Tool Card -->
+  <div class="card" style="margin-top:14px">
+
+    <!-- Options -->
+    <div class="row">
+      <label>インデント
+        <input id="indent" type="number" min="2" max="8" step="1" value="2" style="width:70px" />
+      </label>
+    </div>
+
+    <!-- Input -->
+    <div style="margin-top:10px">
+      <div class="muted">入力（XML）</div>
+      <textarea id="input" placeholder="<?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?><root><item id=&quot;1&quot;><name>サンプル</name></item></root>"></textarea>
+      <div class="row" style="margin-top:8px">
+        <button class="btn primary" id="formatBtn">整形する</button>
+        <button class="btn" id="minifyBtn">ミニファイ</button>
+        <button class="btn" id="copyBtn">コピー</button>
+        <button class="btn" id="clearBtn">クリア</button>
+      </div>
+    </div>
+
+    <!-- Output -->
+    <div style="margin-top:10px">
+      <div class="muted">出力</div>
+      <pre id="output" class="out"></pre>
+      <div class="row" style="margin-top:6px">
+        <button class="btn small" id="copyOutBottom">コピー</button>
+      </div>
+    </div>
+
+    <!-- Footer hint -->
+    <div class="footer">
+      使い方：XMLをペースト → 「整形」。最小化したい場合は「ミニファイ」。<br/>
+      免責：本ツールの利用によるいかなる損害も開発者は責任を負いません。
+    </div>
+  </div>
+
+  <!-- Privacy card -->
+  <div class="card" style="margin-top:12px">
+    <div class="muted">プライバシー</div>
+    <p style="margin:6px 0 0;font-size:14px">このサイトは入力内容をサーバに送信しません。ブラウザ内でのみ処理します。広告を表示する場合、第三者のCookie等が利用されることがあります。</p>
+  </div>
+
+  <!-- Site footer -->
+  <footer class="site-footer card" style="margin-top:32px;font-size:12px">
+    <nav class="footer-nav">
+      <a href="/">トップ</a>
+      <span class="sep">/</span>
+      <a href="/apps/xmlformatter/instructions.html">使い方ガイド</a>
+      <span class="sep">/</span>
+      <a href="https://forms.gle/Ay2dVBVV41A2fJQ27" target="_blank" rel="noopener">お問い合わせ</a>
+      <span class="sep">/</span>
+      <a href="/apps/xmlformatter/privacy.html">プライバシーポリシー</a>
+    </nav>
+  </footer>
+
+</div>
+
+<script>
+const $ = s => document.querySelector(s);
+const input = $('#input'), output = $('#output'), indentEl = $('#indent');
+
+/* --- localStorage --- */
+const SAVED_KEY = 'xmlfmt.indent';
+const saved = localStorage.getItem(SAVED_KEY);
+if (saved) indentEl.value = saved;
+indentEl.addEventListener('change', () => localStorage.setItem(SAVED_KEY, indentEl.value));
+
+/* --- XML Format --- */
+function formatXml(xmlStr, indentSize) {
+  /* Step 1: validate with DOMParser */
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(xmlStr, 'application/xml');
+  const err = doc.querySelector('parsererror');
+  if (err) return 'XMLの解析に失敗しました:\n' + err.textContent;
+
+  /* Step 2: string-based pretty-printer */
+  const pad = ' '.repeat(indentSize);
+
+  /* Tokenize: split XML into tags and text segments */
+  const tokens = [];
+  let i = 0;
+  while (i < xmlStr.length) {
+    if (xmlStr[i] === '<') {
+      /* Comment */
+      if (xmlStr.startsWith('<!--', i)) {
+        const end = xmlStr.indexOf('-->', i);
+        if (end === -1) { tokens.push(xmlStr.substring(i)); break; }
+        tokens.push(xmlStr.substring(i, end + 3));
+        i = end + 3; continue;
+      }
+      /* CDATA */
+      if (xmlStr.startsWith('<![CDATA[', i)) {
+        const end = xmlStr.indexOf(']]>', i);
+        if (end === -1) { tokens.push(xmlStr.substring(i)); break; }
+        tokens.push(xmlStr.substring(i, end + 3));
+        i = end + 3; continue;
+      }
+      /* Normal tag (including PI, closing, self-closing) */
+      const end = xmlStr.indexOf('>', i);
+      if (end === -1) { tokens.push(xmlStr.substring(i)); break; }
+      tokens.push(xmlStr.substring(i, end + 1));
+      i = end + 1;
+    } else {
+      /* Text content */
+      const next = xmlStr.indexOf('<', i);
+      if (next === -1) { tokens.push(xmlStr.substring(i)); break; }
+      tokens.push(xmlStr.substring(i, next));
+      i = next;
+    }
+  }
+
+  const lines = [];
+  let level = 0;
+
+  for (let t = 0; t < tokens.length; t++) {
+    const token = tokens[t];
+
+    /* Processing instruction <?...?> */
+    if (token.startsWith('<?')) {
+      lines.push(pad.repeat(level) + token);
+      continue;
+    }
+    /* Comment */
+    if (token.startsWith('<!--')) {
+      lines.push(pad.repeat(level) + token);
+      continue;
+    }
+    /* CDATA */
+    if (token.startsWith('<![CDATA[')) {
+      lines.push(pad.repeat(level) + token);
+      continue;
+    }
+    /* Closing tag */
+    if (token.startsWith('</')) {
+      level--;
+      lines.push(pad.repeat(Math.max(0, level)) + token);
+      continue;
+    }
+    /* Self-closing tag */
+    if (token.startsWith('<') && token.endsWith('/>')) {
+      lines.push(pad.repeat(level) + token);
+      continue;
+    }
+    /* Opening tag */
+    if (token.startsWith('<')) {
+      /* Check for <tag>text</tag> pattern: next is text, then closing tag */
+      const next1 = tokens[t + 1];
+      const next2 = tokens[t + 2];
+      if (next1 && !next1.startsWith('<') && next2 && next2.startsWith('</')) {
+        lines.push(pad.repeat(level) + token + next1 + next2);
+        t += 2;
+        continue;
+      }
+      lines.push(pad.repeat(level) + token);
+      level++;
+      continue;
+    }
+    /* Pure text between tags */
+    const trimmed = token.trim();
+    if (trimmed) {
+      lines.push(pad.repeat(level) + trimmed);
+    }
+  }
+
+  return lines.join('\n');
+}
+
+/* --- Minify --- */
+function minifyXml(xmlStr) {
+  let xml = xmlStr.replace(/<!--[\s\S]*?-->/g, '');
+  xml = xml.replace(/>\s+</g, '><');
+  return xml.trim();
+}
+
+/* --- Event handlers --- */
+$('#formatBtn').addEventListener('click', () => {
+  const xml = input.value || '';
+  if (!xml.trim()) { output.textContent = ''; return; }
+  const size = Math.max(2, Math.min(8, Number(indentEl.value) || 2));
+  output.textContent = formatXml(xml, size);
+});
+
+$('#minifyBtn').addEventListener('click', () => {
+  const xml = input.value || '';
+  if (!xml.trim()) { output.textContent = ''; return; }
+  output.textContent = minifyXml(xml);
+});
+
+async function copyText() {
+  const text = output.textContent || '';
+  if (!text) return;
+  try { await navigator.clipboard.writeText(text); alert('コピーしました'); }
+  catch { alert('コピーに失敗しました'); }
+}
+$('#copyBtn').addEventListener('click', copyText);
+$('#copyOutBottom').addEventListener('click', copyText);
+
+$('#clearBtn').addEventListener('click', () => {
+  input.value = '';
+  output.textContent = '';
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>使い方ガイド | XML整形ツール</title>
+  <meta name="description" content="XML整形ツールの使い方ガイド。基本操作、対応XML要素、各機能の説明を解説します。">
+  <style>
+    :root { --bg:#f8fafc; --card:#ffffff; --muted:#666666; --fg:#1a1a1a; --acc:#2563eb; }
+    *{box-sizing:border-box; margin:0; padding:0}
+    body{background:var(--bg);color:var(--fg);font:16px/1.7 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+    .wrap{max-width:860px;margin:0 auto;padding:24px 16px}
+    h1{font-size:1.6rem;font-weight:800;margin-bottom:1rem;color:var(--acc)}
+    h2{font-size:1.2rem;font-weight:700;margin:2rem 0 0.5rem;padding-bottom:0.3rem;border-bottom:1px solid #e5e7eb}
+    h3{font-size:1rem;font-weight:600;margin:1.2rem 0 0.4rem;color:var(--acc)}
+    p{margin-bottom:0.8rem}
+    ul,ol{margin:0.5rem 0 1rem 1.5rem}
+    li{margin-bottom:0.4rem}
+    a{color:var(--acc);text-decoration:none}
+    a:hover{text-decoration:underline}
+    .card{background:var(--card);border:1px solid #e5e7eb;border-radius:14px;padding:16px;margin:1rem 0;box-shadow:0 2px 8px rgba(0,0,0,0.08)}
+    .step{counter-increment:step;position:relative;padding-left:2.5rem;margin-bottom:1.5rem}
+    .step::before{content:counter(step);position:absolute;left:0;top:0;width:2rem;height:2rem;background:var(--acc);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.9rem}
+    .steps{counter-reset:step}
+    code{background:#f5f5f5;border:1px solid #e5e7eb;border-radius:6px;padding:2px 6px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:0.9em}
+    .badge{display:inline-block;padding:2px 10px;border:1px solid #d0d5dd;border-radius:999px;font-size:12px;color:#555;margin:2px}
+    .note{background:#f0f5ff;border-left:3px solid var(--acc);padding:12px 16px;border-radius:0 8px 8px 0;margin:1rem 0;font-size:0.9rem}
+    .footer{margin-top:2rem;padding-top:1rem;border-top:1px solid #e5e7eb;font-size:12px;color:var(--muted);text-align:center}
+    .footer a{color:var(--muted)}
+    .footer .sep{margin:0 8px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>XML整形ツール 使い方ガイド</h1>
+
+    <p>
+      XML整形ツールは、XMLをブラウザだけで整形・ミニファイできる無料ツールです。
+      このページでは基本的な使い方を説明します。
+    </p>
+
+    <h2>基本的な使い方</h2>
+
+    <div class="steps">
+      <div class="step">
+        <strong>XMLを入力する</strong>
+        <p>入力エリアに、整形したいXMLを貼り付けます。</p>
+      </div>
+      <div class="step">
+        <strong>インデントサイズを設定する</strong>
+        <p>必要に応じて、インデントサイズ（2〜8）を選択します。設定はブラウザに保存されます。</p>
+      </div>
+      <div class="step">
+        <strong>「整形」ボタンをクリック</strong>
+        <p>ボタンを押すと、出力エリアに整形結果が表示されます。</p>
+      </div>
+      <div class="step">
+        <strong>結果をコピー</strong>
+        <p>「コピー」ボタンで整形結果をクリップボードにコピーできます。</p>
+      </div>
+    </div>
+
+    <h2>機能の説明</h2>
+
+    <h3>整形</h3>
+    <p>XMLをインデント付きで見やすく整形（プリティプリント）します。ネストされた要素が階層的に表示されます。</p>
+
+    <h3>ミニファイ</h3>
+    <p>XMLからコメントと不要な空白を除去し、1行に圧縮します。ファイルサイズの削減に便利です。</p>
+
+    <h3>コピー</h3>
+    <p>出力エリアの内容をクリップボードにコピーします。</p>
+
+    <h3>クリア</h3>
+    <p>入力エリアと出力エリアの両方をクリアします。</p>
+
+    <h2>対応するXML要素</h2>
+
+    <p>以下のXML構造に対応しています：</p>
+    <div style="margin:0.5rem 0 1rem">
+      <span class="badge">要素</span>
+      <span class="badge">属性</span>
+      <span class="badge">コメント</span>
+      <span class="badge">CDATA</span>
+      <span class="badge">処理命令</span>
+      <span class="badge">名前空間</span>
+    </div>
+
+    <div class="note">
+      不正なXMLが入力された場合、エラーメッセージが表示されます。整形前にXMLの構文が正しいことをご確認ください。
+    </div>
+
+    <h2>注意事項</h2>
+
+    <div class="card">
+      <ul>
+        <li><strong>データはブラウザ内でのみ処理されます</strong> — サーバーへの送信は一切ありません。</li>
+        <li><strong>機密情報の入力はお控えください</strong> — パスワード、APIキー、個人情報などは入力しないでください。</li>
+        <li><strong>整形結果の正確性は保証しません</strong> — 本番環境で使用する前に、必ず内容を検証してください。</li>
+        <li><strong>非常に大きなXMLファイル</strong>は処理に時間がかかる場合があります。</li>
+      </ul>
+    </div>
+
+    <p style="margin-top:2rem">
+      <a href="/apps/xmlformatter/">← ツールに戻る</a>
+    </p>
+
+    <footer class="footer">
+      <a href="/">トップ</a>
+      <span class="sep">/</span>
+      <a href="https://forms.gle/Ay2dVBVV41A2fJQ27" target="_blank" rel="noopener">お問い合わせ</a>
+      <span class="sep">/</span>
+      <a href="/apps/xmlformatter/privacy.html">プライバシーポリシー</a>
+    </footer>
+  </div>
+</body>
+</html>
